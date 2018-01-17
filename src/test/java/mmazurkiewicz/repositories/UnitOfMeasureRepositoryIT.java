@@ -1,29 +1,40 @@
 package mmazurkiewicz.repositories;
 
+import mmazurkiewicz.bootstrap.DevBootstrap;
 import mmazurkiewicz.domain.UnitOfMeasure;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-@Ignore
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@DataMongoTest
 public class UnitOfMeasureRepositoryIT {
 
     @Autowired
     UnitOfMeasureRepository unitOfMeasureRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    RecipeRepository recipeRepository;
+
     @Before
     public void setUp() throws Exception {
+        recipeRepository.deleteAll();
+        categoryRepository.deleteAll();
+        unitOfMeasureRepository.deleteAll();
+
+        DevBootstrap devBootstrap = new DevBootstrap(categoryRepository, recipeRepository, unitOfMeasureRepository);
+
+        devBootstrap.onApplicationEvent(null);
     }
 
     @Test
