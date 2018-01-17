@@ -6,19 +6,22 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class Ingredient {
 
-    @Id
-    private String id;
+    //@Id
+    private String id = UUID.randomUUID().toString();
     private String description;
     private BigDecimal amount;
-    private UnitOfMeasure unitOfMeasure;
 
     @DBRef
-    private Recipe recipe;
+    private UnitOfMeasure unitOfMeasure;
+
+    //@DBRef
+    //private Recipe recipe;
 
     public Ingredient(){
     }
