@@ -46,7 +46,7 @@ public class IngredientController {
                                          @PathVariable String ingredientId, Model model){
         model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
 
-        model.addAttribute("unitOfMeasureList", unitOfMeasureService.listAllUnitsOfMeasure());
+        model.addAttribute("unitOfMeasureList", unitOfMeasureService.listAllUnitsOfMeasure().collectList().block());
         return "recipe/ingredient/ingredientForm";
     }
 
@@ -60,7 +60,7 @@ public class IngredientController {
 
         ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
 
-        model.addAttribute("unitOfMeasureList", unitOfMeasureService.listAllUnitsOfMeasure());
+        model.addAttribute("unitOfMeasureList", unitOfMeasureService.listAllUnitsOfMeasure().collectList().block());
 
         return "recipe/ingredient/ingredientForm";
     }

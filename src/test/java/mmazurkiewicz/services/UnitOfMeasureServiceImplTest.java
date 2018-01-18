@@ -4,12 +4,15 @@ import mmazurkiewicz.commands.UnitOfMeasureCommand;
 import mmazurkiewicz.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import mmazurkiewicz.domain.UnitOfMeasure;
 import mmazurkiewicz.repositories.UnitOfMeasureRepository;
+import mmazurkiewicz.repositories.reactive.UnitOfMeasureReactiveRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import reactor.core.publisher.Flux;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -23,13 +26,13 @@ public class UnitOfMeasureServiceImplTest {
     UnitOfMeasureService service;
 
     @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        service = new UnitOfMeasureServiceImpl(unitOfMeasureRepository, unitOfMeasureToUnitOfMeasureCommand);
+        service = new UnitOfMeasureServiceImpl(unitOfMeasureReactiveRepository, unitOfMeasureToUnitOfMeasureCommand);
     }
 
     @Test
@@ -44,14 +47,14 @@ public class UnitOfMeasureServiceImplTest {
         uom2.setId("2");
         unitOfMeasures.add(uom2);
 
-        when(unitOfMeasureRepository.findAll()).thenReturn(unitOfMeasures);
+        when(unitOfMeasureReactiveRepository.findAll()).thenReturn(Flux.just(uom1, uom2));
 
         //when
-        Set<UnitOfMeasureCommand> commands = service.listAllUnitsOfMeasure();
+        List<UnitOfMeasureCommand> commands = service.listAllUnitsOfMeasure().collectList().block();
 
         //then
         assertEquals(2, commands.size());
-        verify(unitOfMeasureRepository, times(1)).findAll();
+        verify(unitOfMeasureReactiveRepository, times(1)).findAll();
     }
 
 }
