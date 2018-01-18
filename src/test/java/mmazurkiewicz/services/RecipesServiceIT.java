@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
 
-@Ignore
+//@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RecipesServiceIT {
@@ -36,7 +36,7 @@ public class RecipesServiceIT {
     RecipeCommandToRecipe recipeCommandToRecipe;
 
     @Test
-    @Transactional
+    //@Transactional
     public void saveOfDescription() throws Exception {
         //given
         Iterable<Recipe> recipes = recipeRepository.findAll();
