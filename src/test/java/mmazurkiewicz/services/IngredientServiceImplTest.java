@@ -90,7 +90,7 @@ public class IngredientServiceImplTest {
         //when
         assertEquals("3", ingredientCommand.getId());
         assertEquals("1", ingredientCommand.getRecipeId());
-        verify(recipeRepository, times(1)).findById(anyString());
+        verify(recipeReactiveRepository, times(1)).findById(anyString());
     }
 
 
@@ -118,7 +118,7 @@ public class IngredientServiceImplTest {
         //then
         assertEquals("3", savedCommand.getId());
         verify(recipeRepository, times(1)).findById(anyString());
-        verify(recipeRepository, times(1)).save(any(Recipe.class));
+        verify(recipeReactiveRepository, times(1)).save(any(Recipe.class));
 
     }
 

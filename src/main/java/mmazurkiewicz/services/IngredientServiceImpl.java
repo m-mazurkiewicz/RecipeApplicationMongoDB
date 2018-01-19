@@ -42,22 +42,19 @@ public class IngredientServiceImpl implements IngredientService {
     public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
 
         return recipeReactiveRepository.findById(recipeId)
-                .map(recipe -> recipe.getIngredients()
-                    .stream()
-                    .filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
-                    .findFirst())
-                .filter(Optional::isPresent)
+                .flatMapIterable(Recipe::getIngredients)
+                .filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
+                .single()
                 .map(ingredient -> {
-                    IngredientCommand command = ingredientToIngredientCommand.convert(ingredient.get());
+                    IngredientCommand command = ingredientToIngredientCommand.convert(ingredient);
                     command.setRecipeId(recipeId);
                     return command;
                 });
     }
 
     @Override
-    @Transactional
     public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand command) {
-        Optional<Recipe> recipeOptional = recipeReactiveRepository.findById(command.getRecipeId()).blockOptional();
+        Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
 
         if(!recipeOptional.isPresent()){
 
@@ -112,7 +109,6 @@ public class IngredientServiceImpl implements IngredientService {
 
         log.debug("deleting ingredient " + ingredientId + " from recipe " + recipeId);
 
-//        Recipe reactiveRecipe = recipeReactiveRepository.findById(recipeId).block();
         Recipe recipe = recipeRepository.findById(recipeId).get();
 
 
