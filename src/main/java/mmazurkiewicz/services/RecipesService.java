@@ -2,13 +2,13 @@ package mmazurkiewicz.services;
 
 import mmazurkiewicz.commands.RecipeCommand;
 import mmazurkiewicz.domain.Recipe;
-
-import java.util.Set;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface RecipesService {
-    public Set<Recipe> getRecipes();
-    public Recipe findById(String l);
-    RecipeCommand saveRecipeCommand(RecipeCommand command);
-    RecipeCommand findCommandById(String l);
-    void deleteById(String idToDelete);
+    public Flux<Recipe> getRecipes();
+    public Mono<Recipe> findById(String l);
+    Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command);
+    Mono<RecipeCommand> findCommandById(String l);
+    Mono<Void> deleteById(String idToDelete);
 }
