@@ -30,14 +30,14 @@ public class ImageController {
 
     @GetMapping("recipe/{recipeId}/image")
     public String showUploadForm(@PathVariable String recipeId, Model model){
-        model.addAttribute("recipe", recipesService.findCommandById(recipeId));
+        model.addAttribute("recipe", recipesService.findCommandById(recipeId).block());
 
         return "recipe/imageUploadForm";
     }
 
     @PostMapping("recipe/{recipeId}/image")
     public String handleImagePost(@PathVariable String recipeId, @RequestParam("imageFile") MultipartFile file){
-        imageService.saveImageFile(recipeId, file);
+        imageService.saveImageFile(recipeId, file).block();
 
         return "redirect:/recipe/" + recipeId + "/show";
     }
